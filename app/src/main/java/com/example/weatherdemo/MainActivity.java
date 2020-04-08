@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -25,12 +27,14 @@ public class MainActivity extends AppCompatActivity implements Callback {
     public ArrayList<WeatherData.WeatherDataResults> weatherDataResults = new ArrayList<>();
     public static final int MAIN_BACK = 1;
     SwipeRefreshLayout refreshLayout;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        progressBar = findViewById(R.id.progressBar);
         refreshLayout =  (SwipeRefreshLayout) findViewById(R.id.refreshLayout);
         refreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         weatherAdapter = new WeatherAdapter(weatherDataResults,MainActivity.this);
@@ -85,10 +89,15 @@ public class MainActivity extends AppCompatActivity implements Callback {
                 if(result.locationName.equals("臺北市"))
                     weatherDataResults.add(result);
             }
-            weatherAdapter.notifyDataSetChanged();
-            Toast.makeText(MainActivity.this,"讀取完成",Toast.LENGTH_SHORT).show();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    weatherAdapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.GONE);
+                }
+            });
         }catch (Exception e){
-            Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+
         }
     }
 }
