@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements Callback {
         recyclerView.setAdapter(weatherAdapter);
 
         if(ExampleUtil.isConnected(MainActivity.this)) {
-            Toast.makeText(MainActivity.this,"讀取中",Toast.LENGTH_SHORT).show();
             CloudAPI.getInstance().getWeather(MainActivity.this);
         }
 
@@ -84,6 +83,9 @@ public class MainActivity extends AppCompatActivity implements Callback {
         String string = response.body().string();
         Log.d("aaaaa",string);
         try{
+            if(weatherDataResults != null){
+                weatherDataResults.clear();
+            }
             WeatherData weatherData = gson.fromJson(string, WeatherData.class);
             for (WeatherData.WeatherDataResults result:weatherData.result.results) {
                 if(result.locationName.equals("臺北市"))
