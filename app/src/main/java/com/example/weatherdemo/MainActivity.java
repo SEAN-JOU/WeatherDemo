@@ -5,20 +5,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -43,6 +38,11 @@ public class MainActivity extends AppCompatActivity implements Callback {
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
         recyclerView.setAdapter(weatherAdapter);
 
+        if(ExampleUtil.isConnected(MainActivity.this)) {
+            Toast.makeText(MainActivity.this,"讀取中",Toast.LENGTH_SHORT).show();
+            CloudAPI.getInstance().getWeather(MainActivity.this);
+        }
+
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -58,11 +58,6 @@ public class MainActivity extends AppCompatActivity implements Callback {
                 }, 1000);
             }
         });
-    }
-
-    public void onResume(){
-        super.onResume();
-        CloudAPI.getInstance().getWeather(MainActivity.this);
     }
 
     @Override
@@ -91,8 +86,9 @@ public class MainActivity extends AppCompatActivity implements Callback {
                     weatherDataResults.add(result);
             }
             weatherAdapter.notifyDataSetChanged();
+            Toast.makeText(MainActivity.this,"讀取完成",Toast.LENGTH_SHORT).show();
         }catch (Exception e){
-
+            Toast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
         }
     }
 }
