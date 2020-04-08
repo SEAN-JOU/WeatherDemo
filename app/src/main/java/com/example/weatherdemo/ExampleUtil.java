@@ -41,7 +41,7 @@ public class ExampleUtil {
     }
 
     public static boolean isConnected(Context context) {
-        ConnectivityManager conn = (ConnectivityManager) MyApplication.getContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager conn = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = conn.getActiveNetworkInfo();
         return (info != null && info.isConnected());
     }
@@ -101,8 +101,7 @@ public class ExampleUtil {
         return localVersion;
     }
 
-    public static Bitmap drawableToBitmap(Drawable drawable)
-    {
+    public static Bitmap drawableToBitmap(Drawable drawable) {
         Bitmap.Config c =drawable.getOpacity() != PixelFormat.OPAQUE ?
                 Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
         Bitmap bitmap = Bitmap.createBitmap(
@@ -114,8 +113,7 @@ public class ExampleUtil {
         return bitmap;
     }
 
-    public static Bitmap drawableToBitmap1(Drawable drawable)
-    {
+    public static Bitmap drawableToBitmap1(Drawable drawable) {
         Bitmap.Config c =drawable.getOpacity() != PixelFormat.OPAQUE ?
                 Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
         Bitmap bitmap = Bitmap.createBitmap(
